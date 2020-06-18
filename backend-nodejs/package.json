@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/alniang/africaparis#readme",
   "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.5.9",
     "puppeteer": "^3.3.0"
   }
 }

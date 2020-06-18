@@ -79,6 +79,7 @@ const scrap = async () => {
   browser.close()
   let data = JSON.stringify(results, null, 2);
   fs.writeFileSync('./json/ebenafrica.json', data);
+  fs.writeFileSync('../configMongoDB/dataset/ebenafrica.json', data);
   return results
 }
 
