@@ -12,16 +12,12 @@ const fs = require('fs');
 
 const getAllUrl = async browser => {
   const page = await browser.newPage()
-  await page.goto('https://abenafrica.com/afro-agenda/')
+  await page.goto('https://www.afrikrea.com/fr/categories/clothing')
   await page.waitFor('body')
-
-  // setTimeout(() => { page.click('.mec-load-more-button'); }, 5000);
-
-  await page.waitForSelector('.mec-load-more-button')
-  await page.click('.mec-load-more-button')
   
   const result = await page.evaluate(() =>
-  [...document.querySelectorAll('.mec-event-title a')].map(link => link.href),
+  Array.from(document.querySelectorAll('div.card div.content div.title a'))
+        .map(url => ({ url : url.href}))
   )
   return result
 }
@@ -32,40 +28,44 @@ const getDataFromUrl = async (browser, url) => {
   await page.goto(url)
   await page.waitFor('body')
   return page.evaluate(() => {
-    //let titre = document.querySelector('h1').innerText
-    let titre = document.querySelector('h1')
-    if(titre != null){
-      titre = titre.innerText
-    }
 
-    //let lieu = document.querySelector('dd.author').innerText
-    let lieu = document.querySelector('dd.author')
-    if(lieu != null){
-      lieu = lieu.innerText
-    }
+    let photo = Array.from(document.querySelectorAll('div.product-photo-thumbnails a img')).map(photo => photo.src)
+    // //let titre = document.querySelector('h1').innerText
+    // let titre = document.querySelector('h1')
+    // if(titre != null){
+    //   titre = titre.innerText
+    // }
 
-    //let desc = document.querySelector('div.mec-events-content').innerText
-    let desc = document.querySelector('div.mec-events-content')
-    if(desc != null){
-      desc = desc.innerText
-    }
+    // //let lieu = document.querySelector('dd.author').innerText
+    // let lieu = document.querySelector('dd.author')
+    // if(lieu != null){
+    //   lieu = lieu.innerText
+    // }
 
-    //let logo = document.querySelector('div.mec-events-event-image img').src
+    // //let desc = document.querySelector('div.mec-events-content').innerText
+    // let desc = document.querySelector('div.mec-events-content')
+    // if(desc != null){
+    //   desc = desc.innerText
+    // }
+
+    // //let logo = document.querySelector('div.mec-events-event-image img').src
 
 
-    //let debut = document.querySelector('span.mec-start-date-label').innerText
-    let debut = document.querySelector('span.mec-start-date-label')
-    if(debut != null){
-      debut = debut.innerText
-    }
+    // //let debut = document.querySelector('span.mec-start-date-label').innerText
+    // let debut = document.querySelector('span.mec-start-date-label')
+    // if(debut != null){
+    //   debut = debut.innerText
+    // }
 
-    //let fin = document.querySelector('span.mec-end-date-label').textContent
-    let fin = document.querySelector('span.mec-end-date-label')
-    if(fin != null){
-      fin = fin.innerText
-    }
+    // //let fin = document.querySelector('span.mec-end-date-label').textContent
+    // let fin = document.querySelector('span.mec-end-date-label')
+    // if(fin != null){
+    //   fin = fin.innerText
+    // }
 
-    return { titre, lieu, desc, debut, fin}
+    // return { titre, lieu, desc, debut, fin}
+
+    return {photo}
   })
 }
 
@@ -85,8 +85,8 @@ const scrap = async () => {
   )
   browser.close()
   let data = JSON.stringify(results, null, 2);
-  fs.writeFileSync('./json/ebenafrica.json', data);
-  fs.writeFileSync('../configMongoDB/dataset/ebenafrica.json', data);
+  fs.writeFileSync('../json/afrikrea/afrikrea.json', data);
+  
   return results
 }
 

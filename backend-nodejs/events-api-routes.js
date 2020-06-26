@@ -22,9 +22,20 @@ apiRouter.route('/events-api/public/events')
 	var changeMini = Number(req.query.changeMini);
 	var mongoQuery = changeMini ? { change: { $gte: changeMini }  } : { } ;
 	//console.log("mongoQuery="+JSON.stringify(mongoQuery));
-	myGenericMongoEvents.genericFindList('fusion',mongoQuery,function(err,events){
+	myGenericMongoEvents.genericFindList('fusionEbenafrica',mongoQuery,function(err,events){
 		   //res.send(replace_mongoId_byCode_inArray(events));
 		   res.send(events);
+	});//end of genericFindList()
+});
+
+apiRouter.route('/boutique-api/public/articles')
+.get( function(req , res  , next ) {
+	var changeMini = Number(req.query.changeMini);
+	var mongoQuery = changeMini ? { change: { $gte: changeMini }  } : { } ;
+	//console.log("mongoQuery="+JSON.stringify(mongoQuery));
+	myGenericMongoEvents.genericFindList('fusionAfrikrea',mongoQuery,function(err,articles){
+		   //res.send(replace_mongoId_byCode_inArray(events));
+		   res.send(articles);
 	});//end of genericFindList()
 });
 
