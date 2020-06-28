@@ -17,8 +17,8 @@ const getAllUrl = async browser => {
 
   // setTimeout(() => { page.click('.mec-load-more-button'); }, 5000);
 
-  await page.waitForSelector('.mec-load-more-button')
-  await page.click('.mec-load-more-button')
+  // await page.waitForSelector('.mec-load-more-button')
+  // await page.click('.mec-load-more-button')
   
   const result = await page.evaluate(() =>
   [...document.querySelectorAll('.mec-event-title a')].map(link => link.href),
@@ -58,6 +58,12 @@ const getDataFromUrl = async (browser, url) => {
     if(debut != null){
       debut = debut.innerText
     }
+    
+    let url = document.URL
+    let urlSansHttps = url.replace(/https:/gi, '')
+    let urlSansHttpsSansPoint = urlSansHttps.replace(/[.]/gi, '')
+    let urlSansHttpsSansPointTire = urlSansHttpsSansPoint.replace(/-/gi, '')
+    let id = urlSansHttpsSansPointTire.replace( /[/]/gi, '')
 
     //let fin = document.querySelector('span.mec-end-date-label').textContent
     let fin = document.querySelector('span.mec-end-date-label')
@@ -65,7 +71,7 @@ const getDataFromUrl = async (browser, url) => {
       fin = fin.innerText
     }
 
-    return { titre, lieu, desc, debut, fin}
+    return {id, titre, lieu, desc, debut, fin}
   })
 }
 

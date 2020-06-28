@@ -43,7 +43,7 @@ const fs = require('fs');
         Array.from(document.querySelectorAll('.mec-event-title a'))
         .map(link => ({url : link.href}))
     )
-
+    console.log(urls)
     //****************** Fin de la récupération des url **************************//
 
     /*console.log(titres)

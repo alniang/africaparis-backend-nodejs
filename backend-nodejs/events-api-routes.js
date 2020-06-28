@@ -15,6 +15,20 @@ function replace_mongoId_byCode_inArray(eventArray){
 	return eventArray;
 }
 */
+//exemple URL: http://localhost:8282/devise-api/public/devise/EUR
+apiRouter.route('/events-api/public/events/:id')
+.get( function(req , res  , next ) {
+	var codeDevise = req.params.id;
+	myGenericMongoEvents.genericFindOne('fusionEbenafrica',
+										{ 'id' : codeDevise },
+									    function(err,event){
+										   //res.send(replace_mongoId_byCode(event));
+										   res.send(event);
+									   }
+									   );
+	
+});
+
 //exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
 //             http://localhost:8282/devise-api/public/devise?changeMini=1.05
 apiRouter.route('/events-api/public/events')
