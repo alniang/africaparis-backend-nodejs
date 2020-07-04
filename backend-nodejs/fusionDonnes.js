@@ -1,10 +1,10 @@
 const fs = require("fs");
 var jsonMerger = require("json-merger");
 
-var resultEbenafrica = jsonMerger.mergeFiles([
-  "./json/ebenafrica.json",
-  "./json/ebenafrica-logos.json",
-  "./json/ebenafrica-urls.json",
+var resultAbenafrica = jsonMerger.mergeFiles([
+  "./json/abenafrica/abenafrica.json",
+  "./json/abenafrica/abenafrica-logos.json",
+  "./json/abenafrica/abenafrica-urls.json",
 ]);
 var resultAfrikrea = jsonMerger.mergeFiles([
   "./json/afrikrea/afrikrea-urls.json",
@@ -13,9 +13,9 @@ var resultAfrikrea = jsonMerger.mergeFiles([
   "./json/afrikrea/afrikrea-prix.json",
 ]);
 
-let dataEbenafrica = JSON.stringify(resultEbenafrica, null, 2);
-fs.writeFileSync("./json/fusionEbenafrica.json", dataEbenafrica);
-fs.writeFileSync("../configMongoDB/dataset/fusionEbenafrica.json", dataEbenafrica);
+let dataAbenafrica = JSON.stringify(resultAbenafrica, null, 2);
+fs.writeFileSync("./json/abenafrica/fusionAbenafrica.json", dataAbenafrica);
+fs.writeFileSync("../configMongoDB/dataset/fusionAbenafrica.json", dataAbenafrica);
 
 let dataAfrikrea = JSON.stringify(resultAfrikrea, null, 2);
 fs.writeFileSync("./json/afrikrea/fusionAfrikrea.json", dataAfrikrea);

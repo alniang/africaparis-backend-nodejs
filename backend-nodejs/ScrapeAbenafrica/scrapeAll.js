@@ -32,46 +32,51 @@ const getDataFromUrl = async (browser, url) => {
   await page.goto(url)
   await page.waitFor('body')
   return page.evaluate(() => {
-    //let titre = document.querySelector('h1').innerText
-    let titre = document.querySelector('h1')
-    if(titre != null){
-      titre = titre.innerText
-    }
 
-    //let lieu = document.querySelector('dd.author').innerText
-    let lieu = document.querySelector('dd.author')
-    if(lieu != null){
-      lieu = lieu.innerText
-    }
-
-    //let desc = document.querySelector('div.mec-events-content').innerText
-    let desc = document.querySelector('div.mec-events-content')
-    if(desc != null){
-      desc = desc.innerText
-    }
-
-    //let logo = document.querySelector('div.mec-events-event-image img').src
-
-
-    //let debut = document.querySelector('span.mec-start-date-label').innerText
-    let debut = document.querySelector('span.mec-start-date-label')
-    if(debut != null){
-      debut = debut.innerText
-    }
-    
+    //Création de id
     let url = document.URL
     let urlSansHttps = url.replace(/https:/gi, '')
     let urlSansHttpsSansPoint = urlSansHttps.replace(/[.]/gi, '')
     let urlSansHttpsSansPointTire = urlSansHttpsSansPoint.replace(/-/gi, '')
     let id = urlSansHttpsSansPointTire.replace( /[/]/gi, '')
 
-    //let fin = document.querySelector('span.mec-end-date-label').textContent
+    //Récupération de titre
+    let titre = document.querySelector('h1')
+    if(titre != null){
+      titre = titre.innerText
+    }
+
+    //Récupération de lieu
+    let lieu = document.querySelector('dd.author')
+    if(lieu != null){
+      lieu = lieu.innerText
+    }
+
+    //Récupération de la description
+    let desc = document.querySelector('div.mec-events-content')
+    if(desc != null){
+      desc = desc.innerText
+    }
+    
+    //Récupération de la date de début
+    let debut = document.querySelector('span.mec-start-date-label')
+    if(debut != null){
+      debut = debut.innerText
+    }
+    
+    //Récupération de la date de fin
     let fin = document.querySelector('span.mec-end-date-label')
     if(fin != null){
       fin = fin.innerText
     }
+    
+    //Récupération de l'heure
+    let heure = document.querySelector("div.mec-single-event-time dd abbr.mec-events-abbr")
+    if(heure !=null){
+      heure = heure.innerText
+    }
 
-    return {id, titre, lieu, desc, debut, fin}
+    return {id, titre, lieu, desc, debut, fin, heure}
   })
 }
 
@@ -91,8 +96,8 @@ const scrap = async () => {
   )
   browser.close()
   let data = JSON.stringify(results, null, 2);
-  fs.writeFileSync('./json/ebenafrica.json', data);
-  fs.writeFileSync('../configMongoDB/dataset/ebenafrica.json', data);
+  fs.writeFileSync('../json/abenafrica/abenafrica.json', data);
+  fs.writeFileSync('../../configMongoDB/dataset/ebenafrica.json', data);
   return results
 }
 

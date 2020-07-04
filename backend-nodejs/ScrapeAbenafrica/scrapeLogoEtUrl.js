@@ -25,7 +25,10 @@ const fs = require('fs');
     for(i = 0 ; i < str.length ; i++){
         const words = str[i].split(' ');
         const logo = words[1]
-        const lien = logo.substring(5,logo.length-2)
+        var lien =null
+        if(logo != undefined){
+            lien = logo.substring(5,logo.length-2)
+        }
         images.push({logo : lien})
     }
     //****************** Fin de la récupération des logos **************************//
@@ -52,12 +55,12 @@ const fs = require('fs');
     console.log(urls)*/
 
     let data_url = JSON.stringify(urls, null, 2);
-    fs.writeFileSync('./json/ebenafrica-urls.json', data_url);
-    fs.writeFileSync('../configMongoDB/dataset/ebenafrica-urls.json', data_url)
+    fs.writeFileSync('../json/abenafrica/abenafrica-urls.json', data_url);
+    fs.writeFileSync('../../configMongoDB/dataset/abenafrica-urls.json', data_url)
     
     let data_logo = JSON.stringify(images, null, 2);
-    fs.writeFileSync('./json/ebenafrica-logos.json', data_logo);
-    fs.writeFileSync('../configMongoDB/dataset/ebenafrica-logos.json', data_logo)
+    fs.writeFileSync('../json/abenafrica/abenafrica-logos.json', data_logo);
+    fs.writeFileSync('../../configMongoDB/dataset/abenafrica-logos.json', data_logo)
     console.log("********** Scrapping fini ***********")
     await browser.close();
 })();
