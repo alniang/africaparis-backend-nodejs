@@ -1,56 +1,86 @@
 var express = require('express');
 const apiRouter = express.Router();
-var myGenericMongoEvents = require('./my_generic_mongo_events');
-/*
-function replace_mongoId_byCode(event){
-	event._id = event.titre;
-	delete event._id; 
-	return event;
-}
+var myGenericMongoClient = require('./my_generic_mongo_client');
 
-function replace_mongoId_byCode_inArray(eventArray){
-	for(i in eventArray){
-		replace_mongoId_byCode(eventArray[i]);
-	}
-	return eventArray;
-}
-*/
-//exemple URL: http://localhost:8282/devise-api/public/devise/EUR
 apiRouter.route('/events-api/public/events/:id')
 .get( function(req , res  , next ) {
-	var codeDevise = req.params.id;
-	myGenericMongoEvents.genericFindOne('fusionEbenafrica',
-										{ 'id' : codeDevise },
+	var idEvent = req.params.id;
+	myGenericMongoClient.genericFindOne('fusionEbenafrica',
+										{ 'id' : idEvent },
 									    function(err,event){
-										   //res.send(replace_mongoId_byCode(event));
 										   res.send(event);
 									   }
 									   );
 	
 });
 
-//exemple URL: http://localhost:8282/devise-api/public/devise (returning all devises)
-//             http://localhost:8282/devise-api/public/devise?changeMini=1.05
 apiRouter.route('/events-api/public/events')
 .get( function(req , res  , next ) {
 	var changeMini = Number(req.query.changeMini);
 	var mongoQuery = changeMini ? { change: { $gte: changeMini }  } : { } ;
-	//console.log("mongoQuery="+JSON.stringify(mongoQuery));
-	myGenericMongoEvents.genericFindList('fusionEbenafrica',mongoQuery,function(err,events){
-		   //res.send(replace_mongoId_byCode_inArray(events));
+	myGenericMongoClient.genericFindList('fusionEbenafrica',mongoQuery,function(err,events){
 		   res.send(events);
-	});//end of genericFindList()
+	});
 });
+
+apiRouter.route('/events-api/public/user/events')
+.post( function(req , res  , next ) {
+	var nouvelleEvent = req.body;
+	console.log("POST,nouvelleEvent="+JSON.stringify(nouvelleEvent));
+	nouvelleEvent._id=nouvelleEvent.id;
+	myGenericMongoClient.genericInsertOne('fusionEbenafrica',
+										nouvelleEvent,
+									     function(err,events){
+										     res.send(nouvelleEvent);
+									    });
+});
+
+// http://localhost:8282/devise-api/private/role-admin/devise en mode PUT
+// avec { "code" : "USD" , "nom" : "Dollar" , "change" : 1.123 } dans req.body
+apiRouter.route('/events-api/public/user/events')
+.put( function(req , res  , next ) {
+	var newValueOfEventToUpdate = req.body;
+	console.log("PUT,newValueOfEventToUpdate="+JSON.stringify(newValueOfEventToUpdate));
+	myGenericMongoClient.genericUpdateOne('fusionEbenafrica',
+	newValueOfEventToUpdate.id ,
+	{ 
+		titre : newValueOfEventToUpdate.titre,
+		lieu : newValueOfEventToUpdate.lieu,
+		desc : newValueOfEventToUpdate.desc,
+		debut : newValueOfEventToUpdate.debut,
+		fin : newValueOfEventToUpdate.fin,
+		heure : newValueOfEventToUpdate.heure,
+		logo : newValueOfEventToUpdate.logo,
+		url : newValueOfEventToUpdate.url,
+	} ,
+	function(err,devise){
+			if(err){
+				res.status(404).json({ error : "no event to update with id=" + newValueOfEventToUpdate.id });
+			}else{
+					res.send(newValueOfEventToUpdate);
+			 }
+	});	//end of genericUpdateOne()
+});
+
+// http://localhost:8282/devise-api/private/role-admin/devise/EUR en mode DELETE
+apiRouter.route('/events-api/public/user/events/:id')
+.delete( function(req , res  , next ) {
+	var idEvent = req.params.id;
+	console.log("DELETE,idEvent="+idEvent);
+	myGenericMongoClient.genericRemove('fusionEbenafrica',{ _id : idEvent },
+									     function(err,devise){
+										     res.send({ deletedEventId : idEvent } );
+									    });
+});
+
 
 apiRouter.route('/boutique-api/public/articles')
 .get( function(req , res  , next ) {
 	var changeMini = Number(req.query.changeMini);
 	var mongoQuery = changeMini ? { change: { $gte: changeMini }  } : { } ;
-	//console.log("mongoQuery="+JSON.stringify(mongoQuery));
-	myGenericMongoEvents.genericFindList('fusionAfrikrea',mongoQuery,function(err,articles){
-		   //res.send(replace_mongoId_byCode_inArray(events));
+	myGenericMongoClient.genericFindList('fusionAfrikrea',mongoQuery,function(err,articles){
 		   res.send(articles);
-	});//end of genericFindList()
+	});
 });
 
 exports.apiRouter = apiRouter;
