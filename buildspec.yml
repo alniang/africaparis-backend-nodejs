@@ -24,10 +24,10 @@ phases:
 # ExpressJS apps will need other artifact directories included (bin/*, public/*, routes/*, views/* etc).
 artifacts:
   files:
-    - 'server.js'
-    - 'events-api-routes.js'
-    - 'fusionDonnes.js
+    - './backend-nodejs/server.js'
+    - './backend-nodejs/events-api-routes.js'
+    - './backend-nodejs/fusionDonnes.js
     - 'package.json'
-    - 'package-lock.json'
-    - 'my_generic_mongo_client.js'
-    - 'node_modules/**/*'
+    - './backend-nodejs/package-lock.json'
+    - './backend-nodejs/my_generic_mongo_client.js'
+    - './backend-nodejs/node_modules/**/*'
