@@ -26,7 +26,7 @@ artifacts:
   files:
     - './backend-nodejs/server.js'
     - './backend-nodejs/events-api-routes.js'
-    - './backend-nodejs/fusionDonnes.js
+    - './backend-nodejs/fusionDonnes.js'
     - 'package.json'
     - './backend-nodejs/package-lock.json'
     - './backend-nodejs/my_generic_mongo_client.js'
